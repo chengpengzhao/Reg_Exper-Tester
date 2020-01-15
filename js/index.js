@@ -70,7 +70,7 @@ $(function () {
         });
     }
     function run() {
-        var txtReg = RegExp($tbReg.val());
+        var txtReg = $tbReg.val();
         var txtInput = $tbInput.val();
         var txtReplace = $tbReplace.val();
         var reg = valiInputReg($tbReg, RegExpOption);
@@ -99,10 +99,13 @@ $(function () {
         }
         valiOutput(outputResult);
 
-	RegforHighlight=RegExp(txtReg,RegExpOption);
-	HighlightInput=txtInput.replace(RegforHighlight,'<span style="background-color:yellow;">'+"$&"+'</span>')
+    if (txtInput.search(/[<>]/g)!= -1 ) {
+    txtInput=txtInput.replace(/[<>]/g,function(c){
+       return {'<':'&lt;','>':'&gt;'}[c];
+         });
+    }
+	HighlightInput=txtInput.replace(reg,'<code style="background-color:yellow;">'+"$&"+'</code >')
 	valiHighlightInput(HighlightInput);
-	
 
 
     }
@@ -161,7 +164,7 @@ $(function () {
     }
     function valiHighlightInput(HighlightInput) {
         if (typeof HighlightInput === "boolean" && HighlightInput === false) {
-            $tbHighlightInput.html($tbInput.val());
+            $tbHighlightInput.html(HighlightInput);
         }
         else if (typeof HighlightInput === "string") {
             $tbHighlightInput.html(HighlightInput);
